@@ -1,0 +1,2028 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CET-4/6 四六级英语备考平台</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --primary-dark: #3730a3;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1), 0 4px 6px rgba(0, 0, 0, 0.05);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: 0.2s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #a855f7 100%);
+            color: white;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(79, 70, 229, 0.3);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+
+        .stat-value {
+            font-weight: 700;
+        }
+
+        /* Navigation */
+        .nav {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px 0;
+            display: flex;
+            gap: 4px;
+        }
+
+        .nav-btn {
+            padding: 10px 24px;
+            border: none;
+            background: var(--card-bg);
+            color: var(--text-light);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            color: var(--primary);
+            background: #eef2ff;
+        }
+
+        .nav-btn.active {
+            background: var(--card-bg);
+            color: var(--primary);
+            font-weight: 600;
+            box-shadow: 0 -2px 0 var(--primary);
+        }
+
+        .nav-emoji {
+            font-size: 18px;
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 24px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .card-icon.vocab {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+        .card-icon.grammar {
+            background: #fce7f3;
+            color: #db2777;
+        }
+        .card-icon.listening {
+            background: #d1fae5;
+            color: #059669;
+        }
+        .card-icon.reading {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        /* Word Card */
+        .word-card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .word-display {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .word-phonetic {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .word-meaning {
+            font-size: 20px;
+            color: var(--text);
+            margin-bottom: 16px;
+        }
+
+        .word-example {
+            font-size: 14px;
+            color: var(--text-light);
+            font-style: italic;
+            margin-bottom: 24px;
+            padding: 10px 16px;
+            background: #f1f5f9;
+            border-radius: var(--radius-sm);
+        }
+
+        .word-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: #eef2ff;
+        }
+
+        .btn-lg {
+            padding: 14px 32px;
+            font-size: 17px;
+            border-radius: var(--radius);
+        }
+
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 13px;
+        }
+
+        /* Input */
+        .input {
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            width: 100%;
+            transition: var(--transition);
+            outline: none;
+            font-family: inherit;
+        }
+
+        .input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Quiz */
+        .quiz-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .quiz-option {
+            padding: 14px 20px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 15px;
+            transition: var(--transition);
+            background: white;
+            text-align: left;
+        }
+
+        .quiz-option:hover {
+            border-color: var(--primary-light);
+            background: #eef2ff;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--danger);
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .quiz-option:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Progress */
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #7c3aed);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        /* Grid Layout */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            padding: 14px 24px;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            animation: slideIn 0.3s ease;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+        .toast.error {
+            background: var(--danger);
+        }
+        .toast.info {
+            background: var(--primary);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        /* Score */
+        .score-display {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: var(--text-light);
+            text-align: center;
+        }
+
+        /* Grammar Section */
+        .grammar-point {
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+            background: #f8fafc;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin-bottom: 16px;
+        }
+
+        .grammar-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 6px;
+        }
+
+        .grammar-example {
+            font-style: italic;
+            color: var(--text-light);
+        }
+
+        /* Fill in blank */
+        .blank-input {
+            display: inline-block;
+            width: 120px;
+            padding: 4px 8px;
+            border: none;
+            border-bottom: 2px dashed var(--primary);
+            outline: none;
+            font-size: inherit;
+            text-align: center;
+            background: transparent;
+            font-family: inherit;
+            color: var(--primary);
+        }
+
+        .blank-input.correct-blank {
+            border-bottom-color: var(--success);
+            color: var(--success);
+        }
+
+        .blank-input.wrong-blank {
+            border-bottom-color: var(--danger);
+            color: var(--danger);
+        }
+
+        /* Audio Button */
+        .audio-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .audio-btn.playing {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+
+        /* Flashcard */
+        .flashcard-container {
+            perspective: 1000px;
+            cursor: pointer;
+            height: 280px;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front,
+        .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: var(--radius);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+        }
+
+        .flashcard-front {
+            background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+        }
+
+        .flashcard-back {
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+            transform: rotateY(180deg);
+        }
+
+        /* Reading passage */
+        .passage {
+            font-size: 17px;
+            line-height: 1.9;
+            color: var(--text);
+            padding: 20px;
+            background: #fafbfc;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border);
+        }
+
+        .passage .highlight {
+            background: #fef3c7;
+            padding: 2px 4px;
+            border-radius: 3px;
+            cursor: help;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .grid-2,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .quiz-options {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-btn {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .word-display {
+                font-size: 36px;
+            }
+
+            .header-inner {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Confetti (simple) */
+        .confetti-piece {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            animation: confettiFall 1.5s ease-out forwards;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Word List Table */
+        .word-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .word-table th,
+        .word-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .word-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .word-table tr:hover td {
+            background: #f8fafc;
+        }
+
+        .level-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .level-badge.easy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .level-badge.medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .level-badge.hard {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .level-badge.cet4 {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .level-badge.cet6 {
+            background: #ede9fe;
+            color: #5b21b6;
+        }
+
+        /* CET Filter */
+        .cet-filter {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .cet-filter-btn {
+            padding: 6px 16px;
+            border: 2px solid var(--border);
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            background: white;
+            transition: var(--transition);
+        }
+        .cet-filter-btn:hover {
+            border-color: var(--primary-light);
+        }
+        .cet-filter-btn.active-filter {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Translation area */
+        .translation-area {
+            min-height: 120px;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            resize: vertical;
+            width: 100%;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+        .translation-area:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        /* Writing */
+        .writing-area {
+            min-height: 200px;
+            padding: 16px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            resize: vertical;
+            width: 100%;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+            line-height: 1.8;
+        }
+        .writing-area:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .word-count {
+            font-size: 13px;
+            color: var(--text-light);
+            text-align: right;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="logo">
+                <div class="logo-icon">🎓</div>
+                CET-4/6 四六级备考
+            </div>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    📝 <span>今日单词: <span class="stat-value" id="todayWords">0</span></span>
+                </div>
+                <div class="stat-item">
+                    ✅ <span>正确率: <span class="stat-value" id="accuracy">0%</span></span>
+                </div>
+                <div class="stat-item">
+                    🔥 <span>连胜: <span class="stat-value" id="streak">0</span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <button class="nav-btn active" data-tab="vocab">
+            <span class="nav-emoji">📖</span> 四六级词汇
+        </button>
+        <button class="nav-btn" data-tab="grammar">
+            <span class="nav-emoji">📝</span> 语法专项
+        </button>
+        <button class="nav-btn" data-tab="listening">
+            <span class="nav-emoji">🎧</span> 听力真题
+        </button>
+        <button class="nav-btn" data-tab="reading">
+            <span class="nav-emoji">📰</span> 阅读理解
+        </button>
+        <button class="nav-btn" data-tab="translation">
+            <span class="nav-emoji">🔄</span> 翻译训练
+        </button>
+        <button class="nav-btn" data-tab="writing">
+            <span class="nav-emoji">✍️</span> 写作模板
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- ==================== 单词学习 ==================== -->
+        <div class="tab-content active" id="tab-vocab">
+            <div class="grid-2">
+                <!-- 闪卡模式 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon vocab">🃏</div>
+                        <div>
+                            <div class="card-title">闪卡记忆</div>
+                            <div class="card-subtitle">点击卡片翻转查看释义</div>
+                        </div>
+                    </div>
+                    <div class="flashcard-container" id="flashcardContainer" onclick="flipCard()">
+                        <div class="flashcard" id="flashcard">
+                            <div class="flashcard-front">
+                                <div class="word-display" id="fcWord">hello</div>
+                                <div class="word-phonetic" id="fcPhonetic">/həˈloʊ/</div>
+                            </div>
+                            <div class="flashcard-back">
+                                <div class="word-meaning" id="fcMeaning">你好；打招呼</div>
+                                <div class="word-example" id="fcExample">"Hello, how are you?"</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                        <span style="font-size: 14px; color: var(--text-light);" id="fcProgress">1 / 10</span>
+                        <div style="display: flex; gap: 8px;">
+                            <button class="btn btn-sm btn-outline" onclick="prevFlashcard()">上一个</button>
+                            <button class="btn btn-sm btn-primary" onclick="nextFlashcard()">下一个</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 选择题测验 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon vocab">❓</div>
+                        <div>
+                            <div class="card-title">单词测验</div>
+                            <div class="card-subtitle" id="quizProgress">第 1 题 / 共 5 题</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <div style="font-size: 14px; color: var(--text-light); margin-bottom: 8px;">请选择"<strong id="quizWord">apple</strong>"的中文意思</div>
+                    </div>
+                    <div class="quiz-options" id="quizOptions">
+                        <button class="quiz-option" data-answer="0">苹果</button>
+                        <button class="quiz-option" data-answer="1">香蕉</button>
+                        <button class="quiz-option" data-answer="2">橘子</button>
+                        <button class="quiz-option" data-answer="3">葡萄</button>
+                    </div>
+                    <div style="margin-top: 16px; text-align: center;">
+                        <span id="quizResult" style="display: none; font-weight: 600;"></span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="quizProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 单词表 -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <div class="card-icon vocab">📋</div>
+                    <div>
+                        <div class="card-title">单词库</div>
+                        <div class="card-subtitle">已学习的所有单词</div>
+                    </div>
+                </div>
+                <div class="cet-filter">
+                    <button class="cet-filter-btn active-filter" data-level="all" onclick="setWordFilter('all')">全部词汇</button>
+                    <button class="cet-filter-btn" data-level="cet4" onclick="setWordFilter('cet4')">CET-4 四级</button>
+                    <button class="cet-filter-btn" data-level="cet6" onclick="setWordFilter('cet6')">CET-6 六级</button>
+                </div>
+                <div style="overflow-x: auto;">
+                    <table class="word-table">
+                        <thead>
+                            <tr>
+                                <th>单词</th>
+                                <th>音标</th>
+                                <th>释义</th>
+                                <th>等级</th>
+                                <th>掌握程度</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wordTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 语法练习 ==================== -->
+        <div class="tab-content" id="tab-grammar">
+            <div class="grid-2">
+                <!-- 语法知识点 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon grammar">📖</div>
+                        <div>
+                            <div class="card-title">四六级语法考点</div>
+                            <div class="card-subtitle">高频语法专项突破</div>
+                        </div>
+                    </div>
+                    <div id="grammarPoints">
+                        <div class="grammar-point">
+                            <div class="grammar-title">1. 虚拟语气 <span class="level-badge cet6">CET-6</span></div>
+                            <p style="font-size: 14px; margin-bottom: 4px;">表示假设、愿望、建议等非真实情况。四六级翻译和写作高频考点。</p>
+                            <p class="grammar-example">If I <strong>were</strong> you, I <strong>would accept</strong> the offer.</p>
+                            <p class="grammar-example">It is essential that he <strong>(should) attend</strong> the meeting.</p>
+                        </div>
+                        <div class="grammar-point">
+                            <div class="grammar-title">2. 倒装句 <span class="level-badge cet4">CET-4</span></div>
+                            <p style="font-size: 14px; margin-bottom: 4px;">部分倒装或完全倒装，常见于四六级翻译和写作。</p>
+                            <p class="grammar-example"><strong>Not only</strong> did he finish the work, <strong>but also</strong> he helped others.</p>
+                            <p class="grammar-example"><strong>Only in this way</strong> can we solve the problem.</p>
+                        </div>
+                        <div class="grammar-point">
+                            <div class="grammar-title">3. 强调句 <span class="level-badge cet4">CET-4</span></div>
+                            <p style="font-size: 14px; margin-bottom: 4px;">It is/was...that/who... 强调句型。</p>
+                            <p class="grammar-example"><strong>It was</strong> in Beijing <strong>that</strong> I first met her.</p>
+                            <p class="grammar-example"><strong>It is</strong> hard work <strong>that</strong> leads to success.</p>
+                        </div>
+                        <div class="grammar-point">
+                            <div class="grammar-title">4. 非谓语动词 <span class="level-badge cet6">CET-6</span></div>
+                            <p style="font-size: 14px; margin-bottom: 4px;">不定式、动名词、分词的用法区别。</p>
+                            <p class="grammar-example"><strong>Having finished</strong> the work, he went home.</p>
+                            <p class="grammar-example">I look forward to <strong>hearing</strong> from you.</p>
+                        </div>
+                        <div class="grammar-point">
+                            <div class="grammar-title">5. 主谓一致 <span class="level-badge cet4">CET-4</span></div>
+                            <p style="font-size: 14px; margin-bottom: 4px;">就近原则、意义一致等规则。</p>
+                            <p class="grammar-example">Neither he nor I <strong>am</strong> going to the party.</p>
+                            <p class="grammar-example">The number of students <strong>is</strong> increasing.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 填空题练习 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon grammar">✍️</div>
+                        <div>
+                            <div class="card-title">语法填空练习</div>
+                            <div class="card-subtitle"><span id="grammarLevel">CET-4 四级难度</span> · <span id="grammarProgressText">第 1 题 / 共 12 题</span></div>
+                        </div>
+                    </div>
+                    <div id="grammarExercise">
+                        <p style="font-size: 17px; line-height: 2; margin-bottom: 20px;" id="grammarSentence">
+                            She <input type="text" class="blank-input" id="grammarBlank" placeholder="______"> to school every day.
+                        </p>
+                        <p style="font-size: 13px; color: var(--text-light); margin-bottom: 16px;" id="grammarHint">
+                            提示：使用 go 的正确形式
+                        </p>
+                        <div style="display: flex; gap: 10px;">
+                            <button class="btn btn-primary" onclick="checkGrammar()">检查答案</button>
+                            <button class="btn btn-outline" onclick="nextGrammar()">下一题</button>
+                        </div>
+                        <div id="grammarFeedback" style="margin-top: 12px; font-weight: 500;"></div>
+                    </div>
+                    <div class="progress-bar" style="margin-top: 16px;">
+                        <div class="progress-fill" id="grammarProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 听力训练 ==================== -->
+        <div class="tab-content" id="tab-listening">
+            <div class="grid-2">
+                <!-- 听写练习 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon listening">🎤</div>
+                        <div>
+                            <div class="card-title">CET-4 听写练习</div>
+                            <div class="card-subtitle">四级真题风格 · 听音频写出句子</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 24px;">
+                        <button class="audio-btn" id="listenBtn" onclick="playListeningAudio()" title="点击播放">
+                            🔊
+                        </button>
+                        <p style="font-size: 13px; color: var(--text-light); margin-top: 8px;">点击播放，可重复听</p>
+                        <p style="font-size: 13px; color: var(--text-light);" id="listenCount">已听 0 次</p>
+                    </div>
+                    <div>
+                        <label style="font-size: 14px; font-weight: 500; display: block; margin-bottom: 8px;">请输入你听到的句子：</label>
+                        <input type="text" class="input" id="listenInput" placeholder="在此输入你听到的内容...">
+                        <div style="display: flex; gap: 10px; margin-top: 12px;">
+                            <button class="btn btn-primary" onclick="checkListening()">提交</button>
+                            <button class="btn btn-outline" onclick="showListeningAnswer()">显示答案</button>
+                            <button class="btn btn-outline" onclick="nextListening()">下一题</button>
+                        </div>
+                        <div id="listenFeedback" style="margin-top: 12px; font-weight: 500;"></div>
+                    </div>
+                    <div class="progress-bar" style="margin-top: 16px;">
+                        <div class="progress-fill" id="listenProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- 听力选择 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon listening">🎯</div>
+                        <div>
+                            <div class="card-title">CET-4/6 听力理解</div>
+                            <div class="card-subtitle">真题风格对话 · 选择正确答案</div>
+                        </div>
+                    </div>
+                    <div style="text-align: center; margin-bottom: 16px;">
+                        <button class="audio-btn" id="listenChoiceBtn" onclick="playChoiceAudio()" title="点击播放">
+                            🔊
+                        </button>
+                        <p style="font-size: 13px; color: var(--text-light); margin-top: 4px;">听对话，回答问题</p>
+                    </div>
+                    <p style="font-weight: 600; margin-bottom: 12px;" id="choiceQuestion">What is the weather like?</p>
+                    <div class="quiz-options" id="choiceOptions">
+                        <button class="quiz-option" data-answer="0">It's sunny.</button>
+                        <button class="quiz-option" data-answer="1">It's rainy.</button>
+                        <button class="quiz-option" data-answer="2">It's snowy.</button>
+                        <button class="quiz-option" data-answer="3">It's windy.</button>
+                    </div>
+                    <div id="choiceFeedback" style="margin-top: 12px; font-weight: 500; text-align: center;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 阅读理解 ==================== -->
+        <div class="tab-content" id="tab-reading">
+            <div class="grid-2">
+                <!-- 阅读文章 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon reading">📰</div>
+                        <div>
+                            <div class="card-title">四六级真题阅读</div>
+                            <div class="card-subtitle" id="readingTitle">The Impact of Artificial Intelligence</div>
+                        </div>
+                    </div>
+                    <div class="passage" id="readingPassage">
+                        Every morning, I wake up at 7 o'clock. First, I brush my teeth and wash my face. Then I have breakfast with my family. I usually eat bread and drink milk. After breakfast, I go to school by bus. My school is not far from my home. At school, I study many subjects like English, math, and science. My favorite subject is English because I like learning new words. After school, I do my homework and then play with my friends in the park. In the evening, I have dinner with my family and watch TV. I go to bed at 10 o'clock.
+                    </div>
+                </div>
+
+                <!-- 阅读理解题 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon reading">❓</div>
+                        <div>
+                            <div class="card-title">阅读理解</div>
+                            <div class="card-subtitle" id="readingProgressText">第 1 题 / 共 5 题</div>
+                        </div>
+                    </div>
+                    <div id="readingExercise">
+                        <p style="font-weight: 600; margin-bottom: 12px;" id="readingQuestion">What time does the person wake up?</p>
+                        <div class="quiz-options" id="readingOptions">
+                            <button class="quiz-option" data-answer="0">At 6 o'clock.</button>
+                            <button class="quiz-option" data-answer="1">At 7 o'clock.</button>
+                            <button class="quiz-option" data-answer="2">At 8 o'clock.</button>
+                            <button class="quiz-option" data-answer="3">At 9 o'clock.</button>
+                        </div>
+                    </div>
+                    <div id="readingFeedback" style="margin-top: 12px; font-weight: 500; text-align: center;"></div>
+                    <div class="progress-bar" style="margin-top: 16px;">
+                        <div class="progress-fill" id="readingProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 多篇文章选择 -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <div class="card-icon reading">📚</div>
+                    <div>
+                        <div class="card-title">文章列表</div>
+                        <div class="card-subtitle">选择不同难度的阅读材料</div>
+                    </div>
+                </div>
+                <div class="grid-3" id="readingArticles"></div>
+            </div>
+        </div>
+
+        <!-- ==================== 翻译训练 ==================== -->
+        <div class="tab-content" id="tab-translation">
+            <div class="grid-2">
+                <!-- 中译英 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon reading">🇨🇳→🇬🇧</div>
+                        <div>
+                            <div class="card-title">中译英（CET-4/6 真题风格）</div>
+                            <div class="card-subtitle" id="ceProgress">第 1 题 / 共 6 题</div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <p style="font-size: 14px; color: var(--text-light); margin-bottom: 8px;">请将以下中文翻译成英文：</p>
+                        <p style="font-size: 17px; font-weight: 500; padding: 16px; background: #fef3c7; border-radius: var(--radius-sm);" id="ceChinese">随着互联网的快速发展，人们获取信息的方式发生了巨大的变化。</p>
+                    </div>
+                    <textarea class="translation-area" id="ceTranslation" placeholder="在此输入英文翻译..."></textarea>
+                    <div class="word-count" id="ceWordCount">0 词</div>
+                    <div style="display: flex; gap: 10px; margin-top: 12px;">
+                        <button class="btn btn-primary" onclick="checkCETranslation()">提交翻译</button>
+                        <button class="btn btn-outline" onclick="showCEAnswer()">参考答案</button>
+                        <button class="btn btn-outline" onclick="nextCETranslation()">下一题</button>
+                    </div>
+                    <div id="ceFeedback" style="margin-top: 12px; font-weight: 500;"></div>
+                    <div class="progress-bar" style="margin-top: 12px;">
+                        <div class="progress-fill" id="ceProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- 英译中 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon reading">🇬🇧→🇨🇳</div>
+                        <div>
+                            <div class="card-title">英译中（CET-4/6 真题风格）</div>
+                            <div class="card-subtitle" id="ecProgress">第 1 题 / 共 6 题</div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <p style="font-size: 14px; color: var(--text-light); margin-bottom: 8px;">请将以下英文翻译成中文：</p>
+                        <p style="font-size: 17px; font-weight: 500; padding: 16px; background: #dbeafe; border-radius: var(--radius-sm);" id="ecEnglish">With the rapid development of the Internet, the way people access information has undergone tremendous changes.</p>
+                    </div>
+                    <textarea class="translation-area" id="ecTranslation" placeholder="在此输入中文翻译..."></textarea>
+                    <div style="display: flex; gap: 10px; margin-top: 12px;">
+                        <button class="btn btn-primary" onclick="checkECTranslation()">提交翻译</button>
+                        <button class="btn btn-outline" onclick="showECAnswer()">参考答案</button>
+                        <button class="btn btn-outline" onclick="nextECTranslation()">下一题</button>
+                    </div>
+                    <div id="ecFeedback" style="margin-top: 12px; font-weight: 500;"></div>
+                    <div class="progress-bar" style="margin-top: 12px;">
+                        <div class="progress-fill" id="ecProgressBar" style="width: 0%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 翻译技巧提示 -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <div class="card-icon reading">💡</div>
+                    <div>
+                        <div class="card-title">四六级翻译技巧</div>
+                        <div class="card-subtitle">常见翻译策略与方法</div>
+                    </div>
+                </div>
+                <div class="grid-3">
+                    <div class="grammar-point">
+                        <div class="grammar-title">1. 词性转换</div>
+                        <p style="font-size: 13px;">中文多用动词，英文多用名词和介词。如"他善于交际" → "He is good at communication."</p>
+                    </div>
+                    <div class="grammar-point">
+                        <div class="grammar-title">2. 增词与减词</div>
+                        <p style="font-size: 13px;">英文需要添加冠词、介词等。如"读书" → "read books"（添加复数）。</p>
+                    </div>
+                    <div class="grammar-point">
+                        <div class="grammar-title">3. 语态转换</div>
+                        <p style="font-size: 13px;">中文多用主动，英文多用被动。如"人们认为…" → "It is believed that..."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== 写作模板 ==================== -->
+        <div class="tab-content" id="tab-writing">
+            <div class="grid-2">
+                <!-- 写作练习 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon reading">✍️</div>
+                        <div>
+                            <div class="card-title">四六级写作练习</div>
+                            <div class="card-subtitle" id="writingPromptTitle">议论文</div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 16px;">
+                        <p style="font-size: 14px; color: var(--text-light); margin-bottom: 8px;">写作题目：</p>
+                        <p style="font-size: 17px; font-weight: 500; padding: 16px; background: #ede9fe; border-radius: var(--radius-sm);" id="writingPrompt">
+                            Directions: For this part, you are allowed 30 minutes to write an essay on the topic "The Importance of Lifelong Learning". You should write at least 120 words but no more than 180 words.
+                        </p>
+                    </div>
+                    <textarea class="writing-area" id="writingArea" placeholder="在此输入你的作文..." oninput="updateWordCount()"></textarea>
+                    <div class="word-count" id="writingWordCount">0 词</div>
+                    <div style="display: flex; gap: 10px; margin-top: 12px;">
+                        <button class="btn btn-primary" onclick="showWritingTemplate()">查看模板</button>
+                        <button class="btn btn-outline" onclick="nextWritingPrompt()">换一题</button>
+                    </div>
+                </div>
+
+                <!-- 写作模板 -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon reading">📋</div>
+                        <div>
+                            <div class="card-title">高分写作模板</div>
+                            <div class="card-subtitle">四六级常用句型与结构</div>
+                        </div>
+                    </div>
+                    <div id="writingTemplates">
+                        <div class="grammar-point">
+                            <div class="grammar-title">开头段模板</div>
+                            <p style="font-size: 13px;">Recently, the issue of ... has aroused widespread concern. As far as I am concerned, ...</p>
+                            <p style="font-size: 13px;">With the rapid development of ..., ... has become increasingly important in our daily life.</p>
+                        </div>
+                        <div class="grammar-point">
+                            <div class="grammar-title">正文段模板</div>
+                            <p style="font-size: 13px;">There are several reasons accounting for this phenomenon. First and foremost, ... Moreover, ... Last but not least, ...</p>
+                            <p style="font-size: 13px;">On the one hand, ... On the other hand, ... Therefore, it is advisable to ...</p>
+                        </div>
+                        <div class="grammar-point">
+                            <div class="grammar-title">结尾段模板</div>
+                            <p style="font-size: 13px;">In conclusion, ... Only by doing so can we ...</p>
+                            <p style="font-size: 13px;">To sum up, ... It is high time that we took effective measures to ...</p>
+                        </div>
+                        <div class="grammar-point">
+                            <div class="grammar-title">高级替换词</div>
+                            <p style="font-size: 13px;">important → significant / crucial / essential</p>
+                            <p style="font-size: 13px;">more and more → an increasing number of</p>
+                            <p style="font-size: 13px;">I think → from my perspective / as far as I am concerned</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 范文参考 -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="card-header">
+                    <div class="card-icon reading">📖</div>
+                    <div>
+                        <div class="card-title">范文参考</div>
+                        <div class="card-subtitle">参考范文（点击换题后更新）</div>
+                    </div>
+                </div>
+                <div class="passage" id="writingSample" style="white-space: pre-line;">
+In recent years, the concept of lifelong learning has gained increasing attention in our society. As far as I am concerned, lifelong learning is of great importance for the following reasons.
+
+First and foremost, in today's rapidly changing world, knowledge becomes outdated very quickly. What we learned in school may no longer be sufficient to meet the demands of our careers. Therefore, we must keep learning to stay competitive. Moreover, lifelong learning contributes to personal growth and self-fulfillment. By acquiring new skills and knowledge, we can broaden our horizons and enrich our lives.
+
+In conclusion, lifelong learning is essential for both professional development and personal satisfaction. Only by embracing the concept of lifelong learning can we adapt to the ever-changing society and lead a meaningful life.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 全局状态 ====================
+        const state = {
+            totalAnswered: 0,
+            totalCorrect: 0,
+            streak: 0,
+            todayWordsLearned: 0,
+        };
+
+        // ==================== 导航切换 ====================
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const tabId = btn.dataset.tab;
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                document.getElementById('tab-' + tabId).classList.add('active');
+            });
+        });
+
+        // ==================== Toast 提示 ====================
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        // ==================== 统计数据更新 ====================
+        function updateStats() {
+            document.getElementById('todayWords').textContent = state.todayWordsLearned;
+            const acc = state.totalAnswered > 0 ? Math.round((state.totalCorrect / state.totalAnswered) * 100) : 0;
+            document.getElementById('accuracy').textContent = acc + '%';
+            document.getElementById('streak').textContent = state.streak;
+        }
+
+        function recordAnswer(correct) {
+            state.totalAnswered++;
+            if (correct) {
+                state.totalCorrect++;
+                state.streak++;
+                state.todayWordsLearned++;
+            } else {
+                state.streak = 0;
+            }
+            updateStats();
+        }
+
+        function celebrate() {
+            const colors = ['#4f46e5', '#7c3aed', '#a855f7', '#10b981', '#f59e0b', '#ef4444', '#3b82f6'];
+            for (let i = 0; i < 30; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.top = -(Math.random() * 100) + 'px';
+                piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+                piece.style.animationDuration = (1 + Math.random() * 2) + 's';
+                piece.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), 2500);
+            }
+        }
+
+        // ==================== 单词数据 ====================
+        const wordList = [
+            // CET-4 高频词汇
+            { word: 'abandon', phonetic: '/əˈbændən/', meaning: 'v. 放弃；抛弃', example: 'They had to abandon the sinking ship.', level: 'cet4' },
+            { word: 'absorb', phonetic: '/əbˈzɔːrb/', meaning: 'v. 吸收；吸引…的注意', example: 'Plants absorb nutrients from the soil.', level: 'cet4' },
+            { word: 'academic', phonetic: '/ˌækəˈdemɪk/', meaning: 'adj. 学术的；学院的', example: 'She has an impressive academic record.', level: 'cet4' },
+            { word: 'accommodate', phonetic: '/əˈkɑːmədeɪt/', meaning: 'v. 容纳；向…提供住处', example: 'The hotel can accommodate 500 guests.', level: 'cet6' },
+            { word: 'accompany', phonetic: '/əˈkʌmpəni/', meaning: 'v. 陪伴；伴随', example: 'He accompanied her to the airport.', level: 'cet4' },
+            { word: 'accomplish', phonetic: '/əˈkɑːmplɪʃ/', meaning: 'v. 达到；完成', example: 'We accomplished our mission successfully.', level: 'cet4' },
+            { word: 'acknowledge', phonetic: '/əkˈnɑːlɪdʒ/', meaning: 'v. 承认；确认', example: 'He acknowledged his mistake publicly.', level: 'cet6' },
+            { word: 'acquire', phonetic: '/əˈkwaɪər/', meaning: 'v. 获得；学到', example: 'She acquired a good knowledge of English.', level: 'cet4' },
+            { word: 'adequate', phonetic: '/ˈædɪkwət/', meaning: 'adj. 足够的；适当的', example: 'The supply is not adequate to the demand.', level: 'cet4' },
+            { word: 'administer', phonetic: '/ədˈmɪnɪstər/', meaning: 'v. 管理；执行', example: 'They administer the company efficiently.', level: 'cet6' },
+            { word: 'adopt', phonetic: '/əˈdɑːpt/', meaning: 'v. 采用；收养', example: 'We adopted a new approach to the problem.', level: 'cet4' },
+            { word: 'aggressive', phonetic: '/əˈɡresɪv/', meaning: 'adj. 侵略的；有进取心的', example: 'An aggressive marketing strategy was launched.', level: 'cet4' },
+            { word: 'alternative', phonetic: '/ɔːlˈtɜːrnətɪv/', meaning: 'n. 替代选择 adj. 替代的', example: 'We need to find an alternative solution.', level: 'cet4' },
+            { word: 'ambiguous', phonetic: '/æmˈbɪɡjuəs/', meaning: 'adj. 模棱两可的', example: 'The statement was deliberately ambiguous.', level: 'cet6' },
+            { word: 'anticipate', phonetic: '/ænˈtɪsɪpeɪt/', meaning: 'v. 预期；期望', example: 'We anticipate a rise in sales this year.', level: 'cet6' },
+            { word: 'appreciate', phonetic: '/əˈpriːʃieɪt/', meaning: 'v. 欣赏；感激；升值', example: 'I really appreciate your help.', level: 'cet4' },
+            { word: 'approach', phonetic: '/əˈproʊtʃ/', meaning: 'v./n. 接近；方法', example: 'A new approach to language teaching.', level: 'cet4' },
+            { word: 'appropriate', phonetic: '/əˈproʊpriət/', meaning: 'adj. 适当的；合适的', example: 'Is this film appropriate for children?', level: 'cet4' },
+            { word: 'assess', phonetic: '/əˈses/', meaning: 'v. 评估；评定', example: 'It is difficult to assess the impact.', level: 'cet4' },
+            { word: 'assign', phonetic: '/əˈsaɪn/', meaning: 'v. 分配；指派', example: 'The teacher assigned homework to students.', level: 'cet4' },
+            { word: 'atmosphere', phonetic: '/ˈætməsfɪr/', meaning: 'n. 气氛；大气层', example: 'The restaurant has a friendly atmosphere.', level: 'cet4' },
+            { word: 'available', phonetic: '/əˈveɪləbl/', meaning: 'adj. 可获得的；有空的', example: 'Is this seat available?', level: 'cet4' },
+            { word: 'barrier', phonetic: '/ˈbæriər/', meaning: 'n. 障碍；屏障', example: 'Language barrier is a common problem.', level: 'cet4' },
+            { word: 'beneficial', phonetic: '/ˌbenɪˈfɪʃl/', meaning: 'adj. 有益的；有利的', example: 'Exercise is beneficial to health.', level: 'cet4' },
+            { word: 'budget', phonetic: '/ˈbʌdʒɪt/', meaning: 'n. 预算 v. 做预算', example: 'We need to budget carefully this month.', level: 'cet4' },
+            { word: 'capable', phonetic: '/ˈkeɪpəbl/', meaning: 'adj. 有能力的', example: 'She is capable of handling the task.', level: 'cet4' },
+            { word: 'challenge', phonetic: '/ˈtʃælɪndʒ/', meaning: 'n./v. 挑战', example: 'This job is a real challenge.', level: 'cet4' },
+            { word: 'circumstance', phonetic: '/ˈsɜːrkəmstæns/', meaning: 'n. 环境；情况', example: 'Under no circumstances should you lie.', level: 'cet4' },
+            { word: 'collapse', phonetic: '/kəˈlæps/', meaning: 'v./n. 倒塌；崩溃', example: 'The building collapsed in the earthquake.', level: 'cet6' },
+            { word: 'commit', phonetic: '/kəˈmɪt/', meaning: 'v. 犯（罪）；承诺；投入', example: 'He committed himself to the project.', level: 'cet4' },
+            { word: 'compensate', phonetic: '/ˈkɑːmpenseɪt/', meaning: 'v. 补偿；赔偿', example: 'Nothing can compensate for the loss.', level: 'cet6' },
+            { word: 'competent', phonetic: '/ˈkɑːmpɪtənt/', meaning: 'adj. 有能力的；胜任的', example: 'He is a highly competent manager.', level: 'cet6' },
+            { word: 'comprehensive', phonetic: '/ˌkɑːmprɪˈhensɪv/', meaning: 'adj. 全面的；综合的', example: 'A comprehensive survey was conducted.', level: 'cet4' },
+            { word: 'concentrate', phonetic: '/ˈkɑːnsntreɪt/', meaning: 'v. 集中；专注', example: 'I cannot concentrate on my work.', level: 'cet4' },
+            { word: 'consequence', phonetic: '/ˈkɑːnsɪkwens/', meaning: 'n. 结果；后果', example: 'You must face the consequences.', level: 'cet4' },
+            { word: 'conservative', phonetic: '/kənˈsɜːrvətɪv/', meaning: 'adj. 保守的；传统的', example: 'Older people tend to be more conservative.', level: 'cet6' },
+            { word: 'considerable', phonetic: '/kənˈsɪdərəbl/', meaning: 'adj. 相当大的；可观的', example: 'A considerable amount of money was spent.', level: 'cet4' },
+            { word: 'contribute', phonetic: '/kənˈtrɪbjuːt/', meaning: 'v. 贡献；捐献；导致', example: 'Everyone should contribute to society.', level: 'cet4' },
+            { word: 'controversial', phonetic: '/ˌkɑːntrəˈvɜːrʃl/', meaning: 'adj. 有争议的', example: 'It is a highly controversial issue.', level: 'cet6' },
+            { word: 'conventional', phonetic: '/kənˈvenʃənl/', meaning: 'adj. 传统的；常规的', example: 'Conventional wisdom is often wrong.', level: 'cet4' },
+            { word: 'cooperate', phonetic: '/koʊˈɑːpəreɪt/', meaning: 'v. 合作；配合', example: 'The two companies agreed to cooperate.', level: 'cet4' },
+            { word: 'correspond', phonetic: '/ˌkɔːrəˈspɑːnd/', meaning: 'v. 符合；通信；相当于', example: 'His actions do not correspond with his words.', level: 'cet6' },
+            { word: 'critical', phonetic: '/ˈkrɪtɪkl/', meaning: 'adj. 批评的；关键的；危急的', example: 'This is a critical moment in history.', level: 'cet4' },
+            { word: 'cultivate', phonetic: '/ˈkʌltɪveɪt/', meaning: 'v. 培养；耕作', example: 'We should cultivate good habits.', level: 'cet6' },
+            { word: 'decline', phonetic: '/dɪˈklaɪn/', meaning: 'v./n. 下降；衰退；拒绝', example: 'The population is in decline.', level: 'cet4' },
+            { word: 'demonstrate', phonetic: '/ˈdemənstreɪt/', meaning: 'v. 证明；演示；示威', example: 'This demonstrates the importance of teamwork.', level: 'cet4' },
+            { word: 'depress', phonetic: '/dɪˈpres/', meaning: 'v. 使沮丧；使萧条', example: 'The news depressed him greatly.', level: 'cet4' },
+            { word: 'derive', phonetic: '/dɪˈraɪv/', meaning: 'v. 源自；获得', example: 'Many English words derive from Latin.', level: 'cet6' },
+            { word: 'deserve', phonetic: '/dɪˈzɜːrv/', meaning: 'v. 应得；值得', example: 'You deserve a reward for your hard work.', level: 'cet4' },
+            { word: 'dilemma', phonetic: '/dɪˈlemə/', meaning: 'n. 进退两难的境地', example: 'She faced a dilemma about her career.', level: 'cet6' },
+        ];
+
+        // ==================== 闪卡 ====================
+        let fcIndex = 0;
+        let fcFlipped = false;
+
+        function updateFlashcard() {
+            const word = wordList[fcIndex];
+            document.getElementById('fcWord').textContent = word.word;
+            document.getElementById('fcPhonetic').textContent = word.phonetic;
+            document.getElementById('fcMeaning').textContent = word.meaning;
+            document.getElementById('fcExample').textContent = '"' + word.example + '"';
+            document.getElementById('fcProgress').textContent = (fcIndex + 1) + ' / ' + wordList.length;
+            fcFlipped = false;
+            document.getElementById('flashcard').classList.remove('flipped');
+        }
+
+        function flipCard() {
+            fcFlipped = !fcFlipped;
+            const card = document.getElementById('flashcard');
+            if (fcFlipped) {
+                card.classList.add('flipped');
+                if (!card.dataset.counted) {
+                    recordAnswer(true);
+                    card.dataset.counted = '1';
+                }
+            } else {
+                card.classList.remove('flipped');
+            }
+        }
+
+        function nextFlashcard() {
+            fcIndex = (fcIndex + 1) % wordList.length;
+            document.getElementById('flashcard').dataset.counted = '';
+            updateFlashcard();
+        }
+
+        function prevFlashcard() {
+            fcIndex = (fcIndex - 1 + wordList.length) % wordList.length;
+            document.getElementById('flashcard').dataset.counted = '';
+            updateFlashcard();
+        }
+
+        // ==================== 单词测验 ====================
+        let quizIndex = 0;
+        let quizCorrectAnswer = 0;
+        const quizTotal = 5;
+        let quizAnswered = false;
+
+        function generateQuiz() {
+            quizAnswered = false;
+            document.getElementById('quizResult').style.display = 'none';
+            const correctWord = wordList[quizIndex % wordList.length];
+            // 随机选3个干扰项
+            const others = wordList.filter((_, i) => i !== quizIndex % wordList.length);
+            const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
+            const options = [correctWord, ...shuffled].sort(() => Math.random() - 0.5);
+            quizCorrectAnswer = options.findIndex(o => o.word === correctWord.word);
+
+            document.getElementById('quizWord').textContent = correctWord.word;
+            const optionButtons = document.querySelectorAll('#quizOptions .quiz-option');
+            optionButtons.forEach((btn, i) => {
+                btn.textContent = options[i].meaning;
+                btn.className = 'quiz-option';
+                btn.disabled = false;
+                btn.onclick = function() { answerQuiz(i); };
+            });
+            document.getElementById('quizProgress').textContent = `第 ${quizIndex + 1} 题 / 共 ${quizTotal} 题`;
+            document.getElementById('quizProgressBar').style.width = ((quizIndex / quizTotal) * 100) + '%';
+        }
+
+        function answerQuiz(choice) {
+            if (quizAnswered) return;
+            quizAnswered = true;
+            const buttons = document.querySelectorAll('#quizOptions .quiz-option');
+            buttons.forEach(b => b.disabled = true);
+
+            const resultEl = document.getElementById('quizResult');
+            if (choice === quizCorrectAnswer) {
+                buttons[choice].classList.add('correct');
+                resultEl.textContent = '✅ 回答正确！';
+                resultEl.style.color = 'var(--success)';
+                recordAnswer(true);
+            } else {
+                buttons[choice].classList.add('wrong');
+                buttons[quizCorrectAnswer].classList.add('correct');
+                resultEl.textContent = '❌ 回答错误！正确答案已标绿';
+                resultEl.style.color = 'var(--danger)';
+                recordAnswer(false);
+            }
+            resultEl.style.display = 'block';
+
+            // 自动进入下一题
+            setTimeout(() => {
+                quizIndex++;
+                if (quizIndex >= quizTotal) {
+                    document.getElementById('quizProgress').textContent = `完成！`;
+                    document.getElementById('quizProgressBar').style.width = '100%';
+                    showToast('测验完成！很棒！', 'success');
+                    celebrate();
+                    quizIndex = 0;
+                }
+                generateQuiz();
+            }, 1500);
+        }
+
+        // ==================== 单词表 ====================
+        let wordFilter = 'all';
+        function renderWordTable() {
+            const tbody = document.getElementById('wordTableBody');
+            const filtered = wordFilter === 'all' ? wordList : wordList.filter(w => w.level === wordFilter);
+            tbody.innerHTML = filtered.map(w => `
+                        <tr>
+                            <td><strong>${w.word}</strong></td>
+                            <td>${w.phonetic}</td>
+                            <td>${w.meaning}</td>
+                            <td><span class="level-badge ${w.level}">${w.level === 'cet4' ? 'CET-4' : 'CET-6'}</span></td>
+                            <td>
+                                <div class="progress-bar" style="width: 80px;">
+                                    <div class="progress-fill" style="width: ${Math.floor(Math.random() * 100)}%;"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+        }
+
+        function setWordFilter(level) {
+            wordFilter = level;
+            document.querySelectorAll('.cet-filter-btn').forEach(b => b.classList.remove('active-filter'));
+            document.querySelector(`.cet-filter-btn[data-level="${level}"]`).classList.add('active-filter');
+            renderWordTable();
+        }
+
+        // ==================== 语法填空 ====================
+        const grammarExercises = [
+            { sentence: 'It is essential that every child ___ (have) equal access to education.', blank: 'have', hint: 'CET-4 虚拟语气：It is essential that + 主语 + (should) do', level: 'cet4' },
+            { sentence: 'Not until he arrived at the station ___ (do) he realize he had left his ticket at home.', blank: 'did', hint: 'CET-4 倒装句：Not until... + 部分倒装', level: 'cet4' },
+            { sentence: 'The professor, together with his students, ___ (be) conducting an experiment now.', blank: 'is', hint: 'CET-4 主谓一致：together with 不影响主语单复数', level: 'cet4' },
+            { sentence: 'By the time you graduate, you ___ (study) English for ten years.', blank: 'will have studied', hint: 'CET-6 将来完成时：by the time 引导的时间状语从句', level: 'cet6' },
+            { sentence: 'It was in this laboratory ___ they made the important discovery.', blank: 'that', hint: 'CET-4 强调句型：It is/was...that...', level: 'cet4' },
+            { sentence: 'The manager, as well as his colleagues, ___ (approve) the proposal yesterday.', blank: 'approved', hint: 'CET-4 主谓一致 + 时态：as well as 不影响主语', level: 'cet4' },
+            { sentence: 'Had I known about the traffic jam, I ___ (leave) home earlier.', blank: 'would have left', hint: 'CET-6 虚拟语气倒装：Had I known = If I had known', level: 'cet6' },
+            { sentence: 'So fast ___ (run) the athlete that no one could catch up with him.', blank: 'did the athlete run', hint: 'CET-4 so...that 倒装结构', level: 'cet4' },
+            { sentence: 'The number of students who ___ (be) absent today is surprisingly large.', blank: 'are', hint: 'CET-4 定语从句中的主谓一致：who 指代 students（复数）', level: 'cet4' },
+            { sentence: 'It is high time that we ___ (take) action to protect the environment.', blank: 'took', hint: 'CET-6 虚拟语气：It is high time that + 过去式', level: 'cet6' },
+            { sentence: 'Only when you understand the problem thoroughly ___ (can) you solve it.', blank: 'can', hint: 'CET-4 only 倒装句', level: 'cet4' },
+            { sentence: 'Neither the teacher nor the students ___ (be) satisfied with the result.', blank: 'are', hint: 'CET-4 主谓一致：neither...nor 就近原则', level: 'cet4' },
+        ];
+
+        let grammarIndex = 0;
+        const grammarTotal = grammarExercises.length;
+
+        function updateGrammarExercise() {
+            const ex = grammarExercises[grammarIndex];
+            document.getElementById('grammarSentence').innerHTML = ex.sentence.replace('___',
+                '<input type="text" class="blank-input" id="grammarBlank" placeholder="______">');
+            document.getElementById('grammarHint').textContent = '提示：' + ex.hint;
+            document.getElementById('grammarLevel').textContent = ex.level === 'cet4' ? 'CET-4 四级难度' : 'CET-6 六级难度';
+            document.getElementById('grammarFeedback').textContent = '';
+            document.getElementById('grammarProgressText').textContent =
+                `第 ${grammarIndex + 1} 题 / 共 ${grammarTotal} 题`;
+            document.getElementById('grammarProgressBar').style.width = ((grammarIndex / grammarTotal) * 100) + '%';
+            document.getElementById('grammarBlank').className = 'blank-input';
+        }
+
+        function checkGrammar() {
+            const blank = document.getElementById('grammarBlank');
+            const answer = blank.value.trim().toLowerCase();
+            const correct = grammarExercises[grammarIndex].blank.toLowerCase();
+            const feedback = document.getElementById('grammarFeedback');
+
+            if (answer === correct) {
+                blank.className = 'blank-input correct-blank';
+                feedback.innerHTML = '✅ 回答正确！';
+                feedback.style.color = 'var(--success)';
+                recordAnswer(true);
+            } else {
+                blank.className = 'blank-input wrong-blank';
+                blank.value = correct;
+                feedback.innerHTML = `❌ 正确答案是：<strong>${grammarExercises[grammarIndex].blank}</strong>`;
+                feedback.style.color = 'var(--danger)';
+                recordAnswer(false);
+            }
+
+            setTimeout(() => {
+                grammarIndex = (grammarIndex + 1) % grammarTotal;
+                if (grammarIndex === 0) {
+                    showToast('语法练习完成！', 'success');
+                    document.getElementById('grammarProgressBar').style.width = '100%';
+                }
+                updateGrammarExercise();
+            }, 2000);
+        }
+
+        function nextGrammar() {
+            grammarIndex = (grammarIndex + 1) % grammarTotal;
+            updateGrammarExercise();
+        }
+
+        // ==================== 听力训练 ====================
+        const listeningSentences = [
+            'Environmental protection has become a global concern in recent decades.',
+            'The development of artificial intelligence is transforming various industries.',
+            'College graduates should be well-prepared for the competitive job market.',
+            'Cultural exchange programs play a vital role in promoting international understanding.',
+            'The government has implemented new policies to stimulate economic growth.',
+            'Effective communication skills are essential for career advancement.',
+            'Renewable energy sources such as solar and wind power are increasingly important.',
+            'The Internet has fundamentally changed the way people access information.',
+        ];
+
+        let listenIndex = 0;
+        let listenPlayCount = 0;
+        const listenTotal = listeningSentences.length;
+
+        function playListeningAudio() {
+            const sentence = listeningSentences[listenIndex];
+            const utterance = new SpeechSynthesisUtterance(sentence);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85;
+            utterance.pitch = 1;
+            const btn = document.getElementById('listenBtn');
+            btn.classList.add('playing');
+            utterance.onend = () => btn.classList.remove('playing');
+            speechSynthesis.speak(utterance);
+            listenPlayCount++;
+            document.getElementById('listenCount').textContent = '已听 ' + listenPlayCount + ' 次';
+        }
+
+        function checkListening() {
+            const input = document.getElementById('listenInput').value.trim();
+            const correct = listeningSentences[listenIndex];
+            const feedback = document.getElementById('listenFeedback');
+
+            // 简单的相似度比较（忽略大小写和标点）
+            const normalize = s => s.toLowerCase().replace(/[.,!?]/g, '').trim();
+            if (normalize(input) === normalize(correct)) {
+                feedback.innerHTML = '✅ 完全正确！';
+                feedback.style.color = 'var(--success)';
+                recordAnswer(true);
+            } else {
+                feedback.innerHTML = `❌ 正确答案是：<br><strong>"${correct}"</strong>`;
+                feedback.style.color = 'var(--danger)';
+                recordAnswer(false);
+            }
+            document.getElementById('listenProgressBar').style.width =
+                (((listenIndex + 1) / listenTotal) * 100) + '%';
+        }
+
+        function showListeningAnswer() {
+            document.getElementById('listenFeedback').innerHTML =
+                `📝 正确答案：<strong>"${listeningSentences[listenIndex]}"</strong>`;
+            document.getElementById('listenFeedback').style.color = 'var(--primary)';
+        }
+
+        function nextListening() {
+            listenIndex = (listenIndex + 1) % listenTotal;
+            listenPlayCount = 0;
+            document.getElementById('listenInput').value = '';
+            document.getElementById('listenFeedback').textContent = '';
+            document.getElementById('listenCount').textContent = '已听 0 次';
+            document.getElementById('listenProgressBar').style.width =
+                ((listenIndex / listenTotal) * 100) + '%';
+        }
+
+        // ==================== 听力选择 ====================
+        const choiceExercises = [
+            {
+                audio: 'M: Have you decided which university to apply for? W: Yes, I think I will choose Peking University because of its strong academic reputation in computer science.',
+                question: 'Why does the woman want to apply to Peking University?',
+                options: ['Because of its location.', 'Because of its academic reputation.', 'Because of the low tuition.', 'Because her friends go there.'],
+                answer: 1
+            },
+            {
+                audio: 'W: The air pollution in this city has become a serious problem. M: I agree. The government should encourage people to use public transportation more often.',
+                question: 'What does the man suggest?',
+                options: ['Building more factories.', 'Using more public transportation.', 'Planting more trees.', 'Staying at home more.'],
+                answer: 1
+            },
+            {
+                audio: 'M: I heard that you have been studying abroad for two years. W: Yes, I studied in the United Kingdom. The experience broadened my horizons and improved my English significantly.',
+                question: 'What did the woman gain from studying abroad?',
+                options: ['A high salary.', 'Broadened horizons and better English.', 'Many new friends.', 'A driver\'s license.'],
+                answer: 1
+            },
+            {
+                audio: 'W: Do you think online education will replace traditional classrooms? M: I believe both have their advantages. Online education offers flexibility, while traditional classrooms provide better face-to-face interaction.',
+                question: 'What is the man\'s opinion about online education?',
+                options: ['It will completely replace traditional classrooms.', 'It has no advantages at all.', 'Both online and traditional education have advantages.', 'Traditional education is useless.'],
+                answer: 2
+            },
+        ];
+
+        let choiceIndex = 0;
+        let choiceAnswered = false;
+
+        function updateChoiceExercise() {
+            choiceAnswered = false;
+            const ex = choiceExercises[choiceIndex];
+            document.getElementById('choiceQuestion').textContent = ex.question;
+            document.getElementById('choiceFeedback').textContent = '';
+            const buttons = document.querySelectorAll('#choiceOptions .quiz-option');
+            buttons.forEach((btn, i) => {
+                btn.textContent = ex.options[i];
+                btn.className = 'quiz-option';
+                btn.disabled = false;
+                btn.onclick = function() { answerChoice(i); };
+            });
+        }
+
+        function playChoiceAudio() {
+            const utterance = new SpeechSynthesisUtterance(choiceExercises[choiceIndex].audio);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.8;
+            const btn = document.getElementById('listenChoiceBtn');
+            btn.classList.add('playing');
+            utterance.onend = () => btn.classList.remove('playing');
+            speechSynthesis.speak(utterance);
+        }
+
+        function answerChoice(choice) {
+            if (choiceAnswered) return;
+            choiceAnswered = true;
+            const correct = choiceExercises[choiceIndex].answer;
+            const buttons = document.querySelectorAll('#choiceOptions .quiz-option');
+            buttons.forEach(b => b.disabled = true);
+            const feedback = document.getElementById('choiceFeedback');
+
+            if (choice === correct) {
+                buttons[choice].classList.add('correct');
+                feedback.innerHTML = '✅ 回答正确！';
+                feedback.style.color = 'var(--success)';
+                recordAnswer(true);
+            } else {
+                buttons[choice].classList.add('wrong');
+                buttons[correct].classList.add('correct');
+                feedback.innerHTML = '❌ 回答错误！';
+                feedback.style.color = 'var(--danger)';
+                recordAnswer(false);
+            }
+
+            setTimeout(() => {
+                choiceIndex = (choiceIndex + 1) % choiceExercises.length;
+                updateChoiceExercise();
+            }, 1500);
+        }
+
+        // ==================== 阅读理解 ====================
+        const readingPassages = [{
+            title: 'The Impact of Artificial Intelligence (CET-6)',
+            level: 'cet6',
+            text: `Artificial intelligence (AI) is rapidly transforming the modern world. From self-driving cars to voice assistants like Siri and Alexa, AI technologies are becoming an integral part of our daily lives. In the workplace, AI-powered automation is replacing many routine tasks, which has raised concerns about job displacement. However, experts argue that AI will also create new types of jobs that require creativity and emotional intelligence — skills that machines cannot easily replicate.
+
+In the field of healthcare, AI algorithms can now analyze medical images with remarkable accuracy, sometimes outperforming human doctors in detecting certain diseases. In education, AI-powered platforms can personalize learning experiences by adapting to each student's strengths and weaknesses. Despite these benefits, there are legitimate concerns about privacy, data security, and the ethical implications of AI decision-making.
+
+Governments around the world are now developing regulations to ensure that AI is used responsibly. The European Union, for example, has proposed comprehensive AI legislation that classifies AI applications based on their risk levels. As we move forward, the challenge will be to harness the benefits of AI while minimizing its potential harms.`,
+            questions: [
+                { q: 'What concern has AI automation raised?', opts: ['Higher salaries.', 'Job displacement.', 'Better healthcare.', 'Improved education.'], a: 1 },
+                { q: 'What can AI do in healthcare according to the passage?', opts: ['Replace all doctors.', 'Analyze medical images accurately.', 'Perform surgeries independently.', 'Prescribe all medicines.'], a: 1 },
+                { q: 'What skills does the passage say machines cannot easily replicate?', opts: ['Calculation and memory.', 'Creativity and emotional intelligence.', 'Speed and efficiency.', 'Data analysis and storage.'], a: 1 },
+                { q: 'What has the European Union proposed?', opts: ['Banning all AI technology.', 'Comprehensive AI legislation.', 'Free AI education for all.', 'Unlimited AI research funding.'], a: 1 },
+                { q: 'What is the main challenge mentioned in the passage?', opts: ['Creating more AI jobs.', 'Harnessing AI benefits while minimizing harms.', 'Teaching AI to everyone.', 'Making AI cheaper.'], a: 1 },
+            ]
+        }, {
+            title: 'Climate Change and Renewable Energy (CET-4)',
+            level: 'cet4',
+            text: `Climate change is one of the most pressing challenges facing humanity today. Rising global temperatures, caused primarily by the burning of fossil fuels, have led to more frequent extreme weather events, rising sea levels, and the loss of biodiversity. Scientists warn that without immediate action, the consequences could be catastrophic.
+
+One of the most effective solutions to combat climate change is the transition to renewable energy sources. Solar power, wind energy, and hydropower are clean alternatives that produce little to no greenhouse gas emissions. Many countries have set ambitious targets for reducing their carbon footprint. China, for instance, has pledged to achieve carbon neutrality by 2060 and has become the world leader in solar panel production.
+
+On an individual level, people can also contribute to the fight against climate change. Simple actions such as reducing energy consumption, using public transportation, and recycling can make a difference when practiced collectively. Education and awareness are key — the more people understand the issue, the more likely they are to take action.`,
+            questions: [
+                { q: 'What is the primary cause of rising global temperatures?', opts: ['Solar energy.', 'Burning of fossil fuels.', 'Wind power.', 'Hydropower.'], a: 1 },
+                { q: 'When has China pledged to achieve carbon neutrality?', opts: ['By 2030.', 'By 2050.', 'By 2060.', 'By 2080.'], a: 2 },
+                { q: 'Which is NOT mentioned as a renewable energy source?', opts: ['Solar power.', 'Wind energy.', 'Nuclear energy.', 'Hydropower.'], a: 2 },
+                { q: 'What individual action is mentioned in the passage?', opts: ['Buying electric cars only.', 'Reducing energy consumption.', 'Moving to the countryside.', 'Becoming vegetarian.'], a: 1 },
+                { q: 'What does the passage say is key to addressing climate change?', opts: ['Government funding.', 'Education and awareness.', 'International travel.', 'Building more factories.'], a: 1 },
+            ]
+        }, {
+            title: 'The Importance of Critical Thinking (CET-6)',
+            level: 'cet6',
+            text: `In an era of information overload, critical thinking has become more important than ever. Every day, we are exposed to a vast amount of information from social media, news outlets, and various online platforms. Not all of this information is accurate or reliable, which is why the ability to evaluate evidence, question assumptions, and draw logical conclusions is essential.
+
+Critical thinking involves several key components. First, one must be able to identify biases — both in the information presented and in one's own thinking. Second, it requires the capacity to analyze arguments logically, distinguishing between facts and opinions. Third, critical thinkers must be open-minded, willing to consider alternative viewpoints and revise their positions when presented with compelling evidence.
+
+In the academic context, critical thinking is highly valued. Universities emphasize the importance of independent thought and the ability to engage with complex ideas. In the workplace, employers increasingly seek candidates who can think critically and solve problems creatively. As automation continues to replace routine tasks, these higher-order thinking skills will become even more valuable in the job market of the future.`,
+            questions: [
+                { q: 'Why is critical thinking more important than ever?', opts: ['Because of social media bans.', 'Because of information overload.', 'Because of fewer news sources.', 'Because of simpler problems.'], a: 1 },
+                { q: 'What is the first component of critical thinking mentioned?', opts: ['Drawing conclusions.', 'Identifying biases.', 'Writing arguments.', 'Memorizing facts.'], a: 1 },
+                { q: 'What does the passage say critical thinkers should be?', opts: ['Stubborn.', 'Open-minded.', 'Quick to judge.', 'Emotional.'], a: 1 },
+                { q: 'Why do employers value critical thinking?', opts: ['For routine tasks only.', 'For creative problem-solving.', 'For physical labor.', 'For data entry.'], a: 1 },
+                { q: 'What will become more valuable as automation replaces routine tasks?', opts: ['Physical strength.', 'Higher-order thinking skills.', 'Typing speed.', 'Memorization ability.'], a: 1 },
+            ]
+        }];
+
+        let readingPassageIndex = 0;
+        let readingQuestionIndex = 0;
+        let readingAnswered = false;
+
+        function updateReadingPassage() {
+            const passage = readingPassages[readingPassageIndex];
+            document.getElementById('readingTitle').textContent = passage.title;
+            document.getElementById('readingPassage').textContent = passage.text;
+            readingQuestionIndex = 0;
+            updateReadingQuestion();
+            renderReadingArticles();
+        }
+
+        function updateReadingQuestion() {
+            readingAnswered = false;
+            const passage = readingPassages[readingPassageIndex];
+            const question = passage.questions[readingQuestionIndex];
+            document.getElementById('readingQuestion').textContent = question.q;
+            document.getElementById('readingFeedback').textContent = '';
+            const buttons = document.querySelectorAll('#readingOptions .quiz-option');
+            buttons.forEach((btn, i) => {
+                btn.textContent = question.opts[i];
+                btn.className = 'quiz-option';
+                btn.disabled = false;
+                btn.onclick = function() { answerReading(i); };
+            });
+            document.getElementById('readingProgressText').textContent =
+                `第 ${readingQuestionIndex + 1} 题 / 共 ${passage.questions.length} 题`;
+            document.getElementById('readingProgressBar').style.width =
+                ((readingQuestionIndex / passage.questions.length) * 100) + '%';
+        }
+
+        function answerReading(choice) {
+            if (readingAnswered) return;
+            readingAnswered = true;
+            const correct = readingPassages[readingPassageIndex].questions[readingQuestionIndex].a;
+            const buttons = document.querySelectorAll('#readingOptions .quiz-option');
+            buttons.forEach(b => b.disabled = true);
+            const feedback = document.getElementById('readingFeedback');
+
+            if (choice === correct) {
+                buttons[choice].classList.add('correct');
+                feedback.innerHTML = '✅ 回答正确！';
+                feedback.style.color = 'var(--success)';
+                recordAnswer(true);
+            } else {
+                buttons[choice].classList.add('wrong');
+                buttons[correct].classList.add('correct');
+                feedback.innerHTML = '❌ 回答错误！';
+                feedback.style.color = 'var(--danger)';
+                recordAnswer(false);
+            }
+
+            setTimeout(() => {
+                const passage = readingPassages[readingPassageIndex];
+                readingQuestionIndex++;
+                if (readingQuestionIndex >= passage.questions.length) {
+                    document.getElementById('readingProgressBar').style.width = '100%';
+                    document.getElementById('readingProgressText').textContent = '本篇文章已完成！';
+                    showToast('阅读理解完成！', 'success');
+                    readingQuestionIndex = 0;
+                }
+                updateReadingQuestion();
+            }, 1500);
+        }
+
+        function selectReadingPassage(index) {
+            readingPassageIndex = index;
+            readingQuestionIndex = 0;
+            updateReadingPassage();
+        }
+
+        function renderReadingArticles() {
+            const container = document.getElementById('readingArticles');
+            container.innerHTML = readingPassages.map((p, i) => `
+                        <div class="card" style="cursor: pointer; border: 2px solid ${i === readingPassageIndex ? 'var(--primary)' : 'var(--border)'};" onclick="selectReadingPassage(${i})">
+                            <h4 style="margin-bottom: 8px;">${p.title}</h4>
+                            <p style="font-size: 13px; color: var(--text-light);">${p.questions.length} 道题目 · ${p.text.length} 词 · <span class="level-badge ${p.level}">${p.level === 'cet4' ? 'CET-4' : 'CET-6'}</span></p>
+                            <span style="font-size: 12px; color: var(--primary);">${i === readingPassageIndex ? '✓ 当前阅读' : '点击阅读 →'}</span>
+                        </div>
+                    `).join('');
+        }
+
+        // ==================== 翻译训练 ====================
+        const ceExercises = [
+            { chinese: '随着互联网的快速发展，人们获取信息的方式发生了巨大的变化。', english: 'With the rapid development of the Internet, the way people access information has undergone tremendous changes.', level: 'cet4' },
+            { chinese: '中国政府高度重视环境保护，并采取了一系列有效措施来减少污染。', english: 'The Chinese government attaches great importance to environmental protection and has taken a series of effective measures to reduce pollution.', level: 'cet4' },
+            { chinese: '越来越多的人意识到，终身学习对于个人发展和职业成功至关重要。', english: 'An increasing number of people have realized that lifelong learning is essential for personal development and career success.', level: 'cet6' },
+            { chinese: '传统文化是一个民族的宝贵财富，我们应该努力保护和传承它。', english: 'Traditional culture is a valuable treasure of a nation, and we should strive to preserve and pass it on.', level: 'cet4' },
+            { chinese: '人工智能技术的发展正在深刻地改变着我们的工作和生活方式。', english: 'The development of artificial intelligence technology is profoundly changing the way we work and live.', level: 'cet6' },
+            { chinese: '只有通过不断努力和创新，我们才能在激烈的竞争中脱颖而出。', english: 'Only through continuous effort and innovation can we stand out in the fierce competition.', level: 'cet6' },
+        ];
+
+        const ecExercises = [
+            { english: 'With the rapid development of the Internet, the way people access information has undergone tremendous changes.', chinese: '随着互联网的快速发展，人们获取信息的方式发生了巨大的变化。', level: 'cet4' },
+            { english: 'The Chinese government attaches great importance to environmental protection and has taken a series of effective measures to reduce pollution.', chinese: '中国政府高度重视环境保护，并采取了一系列有效措施来减少污染。', level: 'cet4' },
+            { english: 'An increasing number of people have realized that lifelong learning is essential for personal development and career success.', chinese: '越来越多的人意识到，终身学习对于个人发展和职业成功至关重要。', level: 'cet6' },
+            { english: 'Traditional culture is a valuable treasure of a nation, and we should strive to preserve and pass it on.', chinese: '传统文化是一个民族的宝贵财富，我们应该努力保护和传承它。', level: 'cet4' },
+            { english: 'The development of artificial intelligence technology is profoundly changing the way we work and live.', chinese: '人工智能技术的发展正在深刻地改变着我们的工作和生活方式。', level: 'cet6' },
+            { english: 'Only through continuous effort and innovation can we stand out in the fierce competition.', chinese: '只有通过不断努力和创新，我们才能在激烈的竞争中脱颖而出。', level: 'cet6' },
+        ];
+
+        let ceIndex = 0;
+        let ecIndex = 0;
+
+        function updateCEExercise() {
+            const ex = ceExercises[ceIndex];
+            document.getElementById('ceChinese').textContent = ex.chinese;
+            document.getElementById('ceTranslation').value = '';
+            document.getElementById('ceFeedback').textContent = '';
+            document.getElementById('ceWordCount').textContent = '0 词';
+            document.getElementById('ceProgress').textContent = `第 ${ceIndex + 1} 题 / 共 ${ceExercises.length} 题`;
+            document.getElementById('ceProgressBar').style.width = ((ceIndex / ceExercises.length) * 100) + '%';
+        }
+
+        function updateECExercise() {
+            const ex = ecExercises[ecIndex];
+            document.getElementById('ecEnglish').textContent = ex.english;
+            document.getElementById('ecTranslation').value = '';
+            document.getElementById('ecFeedback').textContent = '';
+            document.getElementById('ecProgress').textContent = `第 ${ecIndex + 1} 题 / 共 ${ecExercises.length} 题`;
+            document.getElementById('ecProgressBar').style.width = ((ecIndex / ecExercises.length) * 100) + '%';
+        }
+
+        document.getElementById('ceTranslation').addEventListener('input', function() {
+            document.getElementById('ceWordCount').textContent = this.value.trim().split(/\s+/).filter(w => w.length > 0).length + ' 词';
+        });
+
+        function checkCETranslation() {
+            const input = document.getElementById('ceTranslation').value.trim();
+            const feedback = document.getElementById('ceFeedback');
+            if (!input) {
+                feedback.innerHTML = '⚠️ 请输入翻译内容';
+                feedback.style.color = 'var(--warning)';
+                return;
+            }
+            feedback.innerHTML = `✅ 已提交！参考答案：<br><strong>"${ceExercises[ceIndex].english}"</strong>`;
+            feedback.style.color = 'var(--primary)';
+            recordAnswer(true);
+            document.getElementById('ceProgressBar').style.width = (((ceIndex + 1) / ceExercises.length) * 100) + '%';
+        }
+
+        function showCEAnswer() {
+            document.getElementById('ceFeedback').innerHTML = `📝 参考答案：<br><strong>"${ceExercises[ceIndex].english}"</strong>`;
+            document.getElementById('ceFeedback').style.color = 'var(--primary)';
+        }
+
+        function nextCETranslation() {
+            ceIndex = (ceIndex + 1) % ceExercises.length;
+            updateCEExercise();
+        }
+
+        function checkECTranslation() {
+            const input = document.getElementById('ecTranslation').value.trim();
+            const feedback = document.getElementById('ecFeedback');
+            if (!input) {
+                feedback.innerHTML = '⚠️ 请输入翻译内容';
+                feedback.style.color = 'var(--warning)';
+                return;
+            }
+            feedback.innerHTML = `✅ 已提交！参考答案：<br><strong>"${ecExercises[ecIndex].chinese}"</strong>`;
+            feedback.style.color = 'var(--primary)';
+            recordAnswer(true);
+            document.getElementById('ecProgressBar').style.width = (((ecIndex + 1) / ecExercises.length) * 100) + '%';
+        }
+
+        function showECAnswer() {
+            document.getElementById('ecFeedback').innerHTML = `📝 参考答案：<br><strong>"${ecExercises[ecIndex].chinese}"</strong>`;
+            document.getElementById('ecFeedback').style.color = 'var(--primary)';
+        }
+
+        function nextECTranslation() {
+            ecIndex = (ecIndex + 1) % ecExercises.length;
+            updateECExercise();
+        }
+
+        // ==================== 写作训练 ====================
+        const writingPrompts = [
+            { title: '议论文', prompt: 'Directions: For this part, you are allowed 30 minutes to write an essay on the topic "The Importance of Lifelong Learning". You should write at least 120 words but no more than 180 words.', sample: 'In recent years, the concept of lifelong learning has gained increasing attention in our society. As far as I am concerned, lifelong learning is of great importance for the following reasons.\n\nFirst and foremost, in today\'s rapidly changing world, knowledge becomes outdated very quickly. What we learned in school may no longer be sufficient to meet the demands of our careers. Therefore, we must keep learning to stay competitive. Moreover, lifelong learning contributes to personal growth and self-fulfillment. By acquiring new skills and knowledge, we can broaden our horizons and enrich our lives.\n\nIn conclusion, lifelong learning is essential for both professional development and personal satisfaction. Only by embracing the concept of lifelong learning can we adapt to the ever-changing society and lead a meaningful life.' },
+            { title: '议论文', prompt: 'Directions: For this part, you are allowed 30 minutes to write an essay on the topic "The Advantages and Disadvantages of Online Shopping". You should write at least 120 words but no more than 180 words.', sample: 'In recent years, online shopping has become increasingly popular among consumers. While it brings many conveniences, it also has certain drawbacks.\n\nOn the one hand, online shopping offers great convenience. People can browse and purchase products from the comfort of their homes at any time of the day. Moreover, online stores often offer lower prices than physical stores. On the other hand, online shopping has its disadvantages. Consumers cannot try on clothes or examine products in person, which may lead to dissatisfaction. Additionally, there are risks of online fraud and personal information leakage.\n\nIn conclusion, while online shopping has many advantages, consumers should also be aware of its potential risks. Only by shopping wisely can we fully enjoy the benefits of e-commerce.' },
+            { title: '书信类', prompt: 'Directions: For this part, you are allowed 30 minutes to write a letter to express your gratitude to your English teacher. You should write at least 120 words but no more than 180 words.', sample: 'Dear Mr. Zhang,\n\nI am writing this letter to express my sincere gratitude for your guidance and support during my college years. Your inspiring teaching has not only improved my English but also broadened my horizons.\n\nI still remember the first day of your class when I was too shy to speak English. You encouraged me patiently and created a supportive learning environment. Thanks to your efforts, I have gained confidence in using English and achieved good results in the CET-4 examination.\n\nWords cannot fully express my appreciation. I will always cherish the knowledge and skills you have taught me.\n\nYours sincerely,\nLi Hua' },
+        ];
+
+        let writingIndex = 0;
+
+        function updateWritingPrompt() {
+            const prompt = writingPrompts[writingIndex];
+            document.getElementById('writingPromptTitle').textContent = prompt.title;
+            document.getElementById('writingPrompt').textContent = prompt.prompt;
+            document.getElementById('writingArea').value = '';
+            document.getElementById('writingSample').textContent = prompt.sample;
+            document.getElementById('writingWordCount').textContent = '0 词';
+        }
+
+        function nextWritingPrompt() {
+            writingIndex = (writingIndex + 1) % writingPrompts.length;
+            updateWritingPrompt();
+        }
+
+        function showWritingTemplate() {
+            showToast('请参考右侧高分写作模板和下方范文！', 'info');
+            document.getElementById('writingSample').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function updateWordCount() {
+            const text = document.getElementById('writingArea').value.trim();
+            const count = text.split(/\s+/).filter(w => w.length > 0).length;
+            document.getElementById('writingWordCount').textContent = count + ' 词';
+            if (count >= 120 && count <= 180) {
+                document.getElementById('writingWordCount').style.color = 'var(--success)';
+            } else if (count > 0) {
+                document.getElementById('writingWordCount').style.color = 'var(--warning)';
+            } else {
+                document.getElementById('writingWordCount').style.color = 'var(--text-light)';
+            }
+        }
+
+        // ==================== 初始化 ====================
+        function init() {
+            updateFlashcard();
+            generateQuiz();
+            renderWordTable();
+            updateGrammarExercise();
+            updateChoiceExercise();
+            updateReadingPassage();
+            updateCEExercise();
+            updateECExercise();
+            updateWritingPrompt();
+            updateStats();
+            document.getElementById('listenProgressBar').style.width = '0%';
+            document.getElementById('grammarProgressBar').style.width = '0%';
+        }
+
+        init();
+    </script>
+</body>
+</html>
