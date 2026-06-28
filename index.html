@@ -638,6 +638,49 @@
                 flex-direction: column;
                 gap: 8px;
             }
+
+            body {
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* 移动端按钮增大触摸区域 */
+            .audio-btn {
+                width: 60px;
+                height: 60px;
+                font-size: 26px;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+
+            .btn {
+                min-height: 44px;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+
+            .quiz-option {
+                min-height: 48px;
+                -webkit-tap-highlight-color: transparent;
+                touch-action: manipulation;
+            }
+
+            .nav-btn {
+                min-height: 40px;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .input {
+                font-size: 16px;
+                min-height: 48px;
+            }
+
+            .card {
+                margin-bottom: 12px;
+            }
+
+            .tab-content {
+                padding: 12px 8px;
+            }
         }
 
         /* Confetti (simple) */
@@ -1609,16 +1652,142 @@ In conclusion, lifelong learning is essential for both professional development 
         let listenPlayCount = 0;
         const listenTotal = listeningSentences.length;
 
+        // ==================== 语音合成兼容性修复 ====================
+        let synthReady = false;
+        let synthActive = false;
+
+        // 预激活语音合成（iOS 需要用户手势触发第一次 speak）
+        function ensureSynthReady() {
+            if (synthReady) return true;
+            if (!('speechSynthesis' in window)) {
+                alert('您的浏览器不支持语音合成功能，请使用 Chrome 或 Safari 浏览器。');
+                return false;
+            }
+            // iOS Safari 修复：先 cancel 再 speak 一个空内容来激活
+            try {
+                speechSynthesis.cancel();
+                const dummy = new SpeechSynthesisUtterance('');
+                dummy.volume = 0;
+                dummy.rate = 1;
+                speechSynthesis.speak(dummy);
+                synthReady = true;
+            } catch(e) {
+                console.warn('语音合成初始化失败:', e);
+            }
+            return true;
+        }
+
+        // 安全的语音播放函数，处理移动端兼容性问题
+        function safeSpeak(text, rate, onStart, onEnd, onError) {
+            if (!ensureSynthReady()) {
+                if (onError) onError();
+                return;
+            }
+
+            // 停止之前的播放
+            speechSynthesis.cancel();
+
+            // 移动端延迟一下确保 cancel 生效
+            setTimeout(() => {
+                try {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = rate || 0.85;
+                    utterance.pitch = 1;
+                    utterance.volume = 1;
+
+                    // 选择最佳英文语音（移动端可能只有默认语音）
+                    const voices = speechSynthesis.getVoices();
+                    const enVoice = voices.find(v => v.lang.startsWith('en-') && v.name.includes('Google')) ||
+                                    voices.find(v => v.lang.startsWith('en-US')) ||
+                                    voices.find(v => v.lang.startsWith('en-'));
+                    if (enVoice) {
+                        utterance.voice = enVoice;
+                    }
+
+                    let hasEnded = false;
+                    const cleanup = () => {
+                        if (!hasEnded) {
+                            hasEnded = true;
+                            synthActive = false;
+                            if (onEnd) onEnd();
+                        }
+                    };
+
+                    utterance.onstart = () => {
+                        synthActive = true;
+                        if (onStart) onStart();
+                    };
+
+                    utterance.onend = cleanup;
+
+                    utterance.onerror = (e) => {
+                        // 忽略 'canceled' 和 'interrupted' 错误
+                        if (e.error === 'canceled' || e.error === 'interrupted') {
+                            cleanup();
+                            return;
+                        }
+                        console.warn('语音播放错误:', e.error);
+                        cleanup();
+                        if (onError) onError();
+                    };
+
+                    // iOS Safari 超时保护：如果 30 秒还没结束就强制结束
+                    const timeout = setTimeout(() => {
+                        if (!hasEnded) {
+                            console.warn('语音播放超时，强制结束');
+                            speechSynthesis.cancel();
+                            cleanup();
+                        }
+                    }, 30000);
+
+                    const origEnd = utterance.onend;
+                    utterance.onend = (e) => {
+                        clearTimeout(timeout);
+                        if (origEnd) origEnd(e);
+                    };
+
+                    speechSynthesis.speak(utterance);
+
+                    // iOS Safari 修复：防止播放自动暂停
+                    // 定时检查并重新 speak（iOS 在后台会暂停 speechSynthesis）
+                    const resumeInterval = setInterval(() => {
+                        if (!synthActive || hasEnded) {
+                            clearInterval(resumeInterval);
+                            return;
+                        }
+                        if (!speechSynthesis.speaking && !speechSynthesis.pending) {
+                            clearInterval(resumeInterval);
+                            cleanup();
+                        }
+                    }, 500);
+                } catch (e) {
+                    console.error('语音播放异常:', e);
+                    if (onError) onError();
+                }
+            }, 50);
+        }
+
         function playListeningAudio() {
             const sentence = listeningSentences[listenIndex];
-            const utterance = new SpeechSynthesisUtterance(sentence);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.85;
-            utterance.pitch = 1;
             const btn = document.getElementById('listenBtn');
-            btn.classList.add('playing');
-            utterance.onend = () => btn.classList.remove('playing');
-            speechSynthesis.speak(utterance);
+
+            safeSpeak(sentence, 0.85,
+                // onStart
+                () => {
+                    btn.classList.add('playing');
+                },
+                // onEnd
+                () => {
+                    btn.classList.remove('playing');
+                },
+                // onError
+                () => {
+                    btn.classList.remove('playing');
+                    alert('语音播放失败，请稍后重试。如果问题持续，请检查浏览器是否允许音频播放。');
+                }
+            );
+
             listenPlayCount++;
             document.getElementById('listenCount').textContent = '已听 ' + listenPlayCount + ' 次';
         }
@@ -1705,13 +1874,23 @@ In conclusion, lifelong learning is essential for both professional development 
         }
 
         function playChoiceAudio() {
-            const utterance = new SpeechSynthesisUtterance(choiceExercises[choiceIndex].audio);
-            utterance.lang = 'en-US';
-            utterance.rate = 0.8;
             const btn = document.getElementById('listenChoiceBtn');
-            btn.classList.add('playing');
-            utterance.onend = () => btn.classList.remove('playing');
-            speechSynthesis.speak(utterance);
+
+            safeSpeak(choiceExercises[choiceIndex].audio, 0.8,
+                // onStart
+                () => {
+                    btn.classList.add('playing');
+                },
+                // onEnd
+                () => {
+                    btn.classList.remove('playing');
+                },
+                // onError
+                () => {
+                    btn.classList.remove('playing');
+                    alert('语音播放失败，请稍后重试。');
+                }
+            );
         }
 
         function answerChoice(choice) {
@@ -2020,6 +2199,35 @@ In the academic context, critical thinking is highly valued. Universities emphas
             updateStats();
             document.getElementById('listenProgressBar').style.width = '0%';
             document.getElementById('grammarProgressBar').style.width = '0%';
+
+            // 移动端预加载语音列表
+            if ('speechSynthesis' in window) {
+                // 确保 getVoices 在移动端正确加载
+                let voices = speechSynthesis.getVoices();
+                if (voices.length === 0) {
+                    speechSynthesis.addEventListener('voiceschanged', () => {
+                        ensureSynthReady();
+                    }, { once: true });
+                } else {
+                    ensureSynthReady();
+                }
+            }
+
+            // 为音频按钮绑定 touchstart 事件，确保移动端能触发
+            const listenBtn = document.getElementById('listenBtn');
+            if (listenBtn) {
+                listenBtn.addEventListener('touchstart', function(e) {
+                    // 不阻止默认行为，确保 click 事件也能触发
+                    // 但预激活语音合成
+                    ensureSynthReady();
+                }, { passive: true });
+            }
+            const choiceBtn = document.getElementById('listenChoiceBtn');
+            if (choiceBtn) {
+                choiceBtn.addEventListener('touchstart', function(e) {
+                    ensureSynthReady();
+                }, { passive: true });
+            }
         }
 
         init();
